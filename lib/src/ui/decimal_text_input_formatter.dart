@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/services.dart';
 
 class DecimalTextInputFormatter extends TextInputFormatter {
-
   /// 只允许输入[decimalRange]个小数位的数字
   DecimalTextInputFormatter({required this.decimalRange})
       : assert(decimalRange > 0);
@@ -20,12 +19,12 @@ class DecimalTextInputFormatter extends TextInputFormatter {
 
     String value = newValue.text;
 
-    if (value.contains(".") &&
-        value.substring(value.indexOf(".") + 1).length > decimalRange) {
+    if (value.contains('.') &&
+        value.substring(value.indexOf('.') + 1).length > decimalRange) {
       truncated = oldValue.text;
       newSelection = oldValue.selection;
-    } else if (value == ".") {
-      truncated = "0.";
+    } else if (value == '.') {
+      truncated = '0.';
 
       newSelection = newValue.selection.copyWith(
         baseOffset: math.min(truncated.length, truncated.length + 1),

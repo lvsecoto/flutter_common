@@ -26,14 +26,14 @@ class AnimatedVisibilityWidget extends StatefulWidget {
     this.curve = Curves.easeIn,
     this.isInitAnimated = false,
     this.onDone,
-  })  : super(key: key);
+  }) : super(key: key);
 
   /// 淡出淡入效果
   static Widget fadeAnimationWidgetBuilder(
     BuildContext context,
     Animation<double> animation,
     Widget? child,
-    ) {
+  ) {
     return FadeTransition(
       opacity: animation,
       child: child,

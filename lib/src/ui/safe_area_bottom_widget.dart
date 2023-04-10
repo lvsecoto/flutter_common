@@ -26,7 +26,6 @@ class SafeAreaBottomWidget extends StatelessWidget {
 }
 
 class SafeAreaSliverBottomWidget extends StatelessWidget {
-
   /// Sliver版本的[SafeAreaBottomWidget]，放在SliverList里面
   ///
   /// ```dart

@@ -22,7 +22,8 @@ class TreeNodeDialogWidget<T extends TreeNode> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TreeNodeDialogWidget<T>> createState() => _TreeNodeDialogWidgetState<T>();
+  State<TreeNodeDialogWidget<T>> createState() =>
+      _TreeNodeDialogWidgetState<T>();
 }
 
 class _TreeNodeDialogWidgetState<T extends TreeNode>

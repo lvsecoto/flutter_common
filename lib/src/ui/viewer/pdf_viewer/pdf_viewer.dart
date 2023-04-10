@@ -54,7 +54,7 @@ Future<void> showPdfViewer(
                         await DocumentFileSavePlus().saveFile(
                           pdfData,
                           fileName,
-                          "application/pdf",
+                          'application/pdf',
                         );
                         if (context.mounted) {
                           onMessage(context, '保存PDF成功');

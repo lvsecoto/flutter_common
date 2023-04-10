@@ -68,7 +68,8 @@ FocusNode useIgnoreKeyboardAutoDismissFocusNode({
   List<Object?>? keys,
 }) {
   final context = useContext();
-  final keyboardDismiss = useMemoized(() => ProviderScope.containerOf(context).read(_keyboardDismissProvider));
+  final keyboardDismiss = useMemoized(
+      () => ProviderScope.containerOf(context).read(_keyboardDismissProvider));
   final focusNode = useMemoized(() => FocusNode());
   useEffect(() {
     keyboardDismiss.ignore.add(focusNode);
