@@ -19,8 +19,8 @@ dependencies:
   rxdart: ^0.27.7
   saver_gallery: ^2.0.1
   sliver_tools: ^0.2.9
-  syncfusion_flutter_core: ^22.1.38
-  syncfusion_flutter_pdfviewer: ^22.1.38
+  syncfusion_flutter_core: ^21.1.38
+  syncfusion_flutter_pdfviewer: ^21.1.38
   url_launcher: ^6.1.12
 
 dev_dependencies:
