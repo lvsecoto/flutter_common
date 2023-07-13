@@ -1,17 +1,32 @@
-公共库，包含了可以被公用的代码。
+和业务无关的通用组件
 
-这些代码是不包括业务代码，也不包括品牌特征，比如德成悦采的的对话框，文本都是局中的
+## 特点
 
-如果我们还是想为了简化代码，可以新建一个局中对话框的Widget，放在这个库，然后再[common_dc]()或者项目里包裹和配置这个Widget
-
-如果需要包括业务代码，使用库[common_dc]()
-
-## 介绍
+1. `common`是和业务，品牌无关的通用组件，比如对`riverpod`的功能，图片选择器，也包括对Material Design的扩展
+2. 可利用全局主题来定制组件
 
 ## 开始
 
+把这个包的github地址引入到pubspec.yaml
+
+```yaml
+common:
+  git:
+    url: git@codeup.aliyun.com:6240585956f85235f7dd77d1/app/flutter_common.git
+    ref: [指定版本]
+```
+
 ## 用法
 
+TODO: Include short and useful examples for package users. Add longer examples
+to `/example` folder.
 
-## 其他信息
+```dart
+const like = 'sample';
+```
 
+## Additional information
+
+TODO: Tell users more about the package: where to find more information, how to
+contribute to the package, how to file issues, what response they can expect
+from the package authors, and more.
