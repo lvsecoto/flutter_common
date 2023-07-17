@@ -24,7 +24,6 @@
 library paging_load;
 
 export 'paging_load_provider.dart';
-
 export 'paging_load_more_state_widget.dart';
 export 'paging_refresh_indicator.dart';
 
