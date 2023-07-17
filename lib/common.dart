@@ -12,3 +12,4 @@ export 'src/ui/ui.dart';
 export 'src/data/data.dart';
 export 'src/hook/hook.dart';
 export 'src/native/native.dart';
+export 'src/provider/provider.dart';
