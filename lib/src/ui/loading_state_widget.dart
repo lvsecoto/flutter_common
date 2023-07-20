@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_internal_member
+// ignore_for_file: invalid_use_of_internal_member, implementation_imports
 
 import 'dart:async';
 
@@ -10,7 +10,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod/src/framework.dart';
 
-import 'loading_state_theme.dart';
 export 'loading_state_theme.dart';
 
 /// 显示[futureProvider]的加载状态，加载的时候[child]不显示

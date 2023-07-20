@@ -3,7 +3,6 @@ import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'paging_load_provider.dart';
 
 class PagingLoadMoreStateWidget<Notifier extends PagingLoadNotifierMixin>
     extends ConsumerWidget {
