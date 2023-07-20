@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_internal_member
+
 import 'dart:async';
 
 import 'package:common/common.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod/src/framework.dart';
 
 import 'loading_state_theme.dart';
 export 'loading_state_theme.dart';
@@ -84,14 +87,14 @@ class AutoDisposeProviderLoadingStateWidget extends HookConsumerWidget {
   /// {@macro loading_state.LoadingStateWidget}
   AutoDisposeProviderLoadingStateWidget({
     super.key,
-    required AutoDisposeFutureProvider futureProvider,
+    required AsyncSelector futureProvider,
     this.dependencyProvider = const [],
     required this.child,
     this.onReady,
   }) : futureProvider = [futureProvider];
 
   /// 要等待的provider，可以重试
-  final List<AutoDisposeFutureProvider> futureProvider;
+  final List<AsyncSelector> futureProvider;
 
   /// 依赖的provider，用于重试
   final List<ProviderBase> dependencyProvider;
@@ -107,9 +110,9 @@ class AutoDisposeProviderLoadingStateWidget extends HookConsumerWidget {
     /// 首次进入，发现有错误的缓存，就刷新一次
     useMemoized(() {
       [...futureProvider, ...dependencyProvider]
-          .filter((it) => ref.read(it) is AsyncError)
+          .filter((it) => ref.read(it as ProviderBase) is AsyncError)
           .forEach((it) {
-        ref.invalidate(it);
+        ref.invalidate(it as ProviderBase);
       });
     });
     return FutureLoadingStateWidget(
@@ -122,7 +125,7 @@ class AutoDisposeProviderLoadingStateWidget extends HookConsumerWidget {
           }
         } else {
           for (var provider in futureProvider) {
-            ref.invalidate(provider);
+            ref.invalidate(provider as ProviderBase);
           }
         }
       },
