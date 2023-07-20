@@ -49,7 +49,7 @@ mixin StreamValueNotifier<T> on AutoDisposeNotifier<T?> {
     _subscription = buildStream().listen((next) {
       state = next;
       if (!_completer.isCompleted) {
-        _completer.complete();
+        _completer.complete(next);
       }
     });
     ref.onDispose(() {
@@ -58,15 +58,14 @@ mixin StreamValueNotifier<T> on AutoDisposeNotifier<T?> {
     return null;
   }
 
-  final _completer = Completer();
+  final _completer = Completer<T>();
 
   /// 等待，直到第一个值出现
-  Future<T?> get future async {
-    await _completer.future;
-    return state;
+  Future<T> get future async {
+    return await _completer.future;
   }
 
-  Stream<T?> buildStream();
+  Stream<T> buildStream();
 }
 
 /// 每当[changeNotifier]变化，会引起Notifier变化
