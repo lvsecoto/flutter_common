@@ -1,3 +1,4 @@
+export 'echart/flutter_echarts.dart';
 export 'viewer/viewer.dart';
 export 'animated_visibility_widget.dart';
 export 'animated_list.dart';
