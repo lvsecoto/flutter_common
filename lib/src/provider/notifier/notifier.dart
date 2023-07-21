@@ -46,6 +46,7 @@ mixin StreamValueNotifier<T> on AutoDisposeNotifier<T?> {
 
   @override
   T? build() {
+    _completer = Completer();
     _subscription = buildStream().listen((next) {
       state = next;
       if (!_completer.isCompleted) {
@@ -58,11 +59,12 @@ mixin StreamValueNotifier<T> on AutoDisposeNotifier<T?> {
     return null;
   }
 
-  final _completer = Completer<T>();
+  late Completer<T> _completer;
 
-  /// 等待，直到第一个值出现
+  /// 确保在拿到值的时候，数据已经准备完毕
   Future<T> get future async {
-    return await _completer.future;
+    final data = await _completer.future;
+    return state ?? data;
   }
 
   Stream<T> buildStream();
