@@ -2,12 +2,11 @@
 
 library flutter_echarts;
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:webview_flutter/src/legacy/webview.dart';
-import 'package:webview_flutter/src/legacy/platform_interface.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'echarts_script.dart' show echartsScript;
 
@@ -59,7 +58,7 @@ class Echarts extends StatefulWidget {
 }
 
 class _EchartsState extends State<Echarts> {
-  WebViewController? _controller;
+  late WebViewController _controller;
 
   String? _currentOption;
 
@@ -68,9 +67,22 @@ class _EchartsState extends State<Echarts> {
     super.initState();
     _currentOption = widget.option;
 
+    _controller = WebViewController()
+    ..loadRequest(Uri.parse(htmlBase64))
+    ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    ..setBackgroundColor(Colors.transparent)
+    ..setNavigationDelegate(NavigationDelegate(
+      onPageFinished: (url) {
+        init();
+      },
+      onWebResourceError: (error) {
+        widget.onWebResourceError?.call(_controller, Exception(error));
+      },
+    ));
+
     if (widget.reloadAfterInit) {
       Future.delayed(const Duration(milliseconds: 100), () {
-        _controller?.reload();
+        _controller.reload();
       });
     }
   }
@@ -83,7 +95,7 @@ class _EchartsState extends State<Echarts> {
         : '';
     final themeStr =
         widget.theme != null ? '\'${widget.theme}\'' : 'null';
-    await _controller?.runJavascript('''
+    await _controller.runJavaScript('''
       $echartsScript
       $extensionsStr
       var chart = echarts.init(document.getElementById('chart'), $themeStr);
@@ -91,7 +103,7 @@ class _EchartsState extends State<Echarts> {
       chart.setOption($_currentOption, true);
     ''');
     if (widget.onLoad != null) {
-      widget.onLoad!(_controller!);
+      widget.onLoad!(_controller);
     }
   }
 
@@ -124,7 +136,7 @@ class _EchartsState extends State<Echarts> {
   void update(String preOption) async {
     _currentOption = widget.option;
     if (_currentOption != preOption) {
-      await _controller?.runJavascript('''
+      await _controller.runJavaScript('''
         try {
           chart.setOption($_currentOption, true);
         } catch(e) {
@@ -141,36 +153,24 @@ class _EchartsState extends State<Echarts> {
 
   @override
   void dispose() {
-    _controller?.clearCache();
+    // _controller.clearCache();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return WebView(
-        backgroundColor: const Color(0x00000000),
-        initialUrl: htmlBase64,
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (WebViewController webViewController) {
-          _controller = webViewController;
-        },
-        onPageFinished: (String url) {
-          init();
-        },
-        onWebResourceError: (e) {
-          if (widget.onWebResourceError != null) {
-            widget.onWebResourceError!(_controller!, Exception(e));
-          }
-        },
-        javascriptChannels: <JavascriptChannel>{
-          JavascriptChannel(
-              name: 'Messager',
-              onMessageReceived: (JavascriptMessage javascriptMessage) {
-                if (widget.onMessage != null) {
-                  widget.onMessage!(javascriptMessage.message);
-                }
-              }),
-        },
-        gestureRecognizers: getGestureRecognizers());
+    return WebViewWidget(
+      controller: _controller,
+        // javascriptChannels: <JavascriptChannel>{
+        //   JavascriptChannel(
+        //       name: 'Messager',
+        //       onMessageReceived: (JavascriptMessage javascriptMessage) {
+        //         if (widget.onMessage != null) {
+        //           widget.onMessage!(javascriptMessage.message);
+        //         }
+        //       }),
+        // },
+        // gestureRecognizers: getGestureRecognizers()
+    );
   }
 }
