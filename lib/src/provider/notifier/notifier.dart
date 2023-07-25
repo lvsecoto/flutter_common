@@ -1,4 +1,6 @@
 /// 这里通过mixin给ProviderNotifier添加一些常用操作
+// ignore_for_file: invalid_use_of_internal_member
+
 library provider.notiifer;
 
 import 'dart:async';
@@ -73,7 +75,7 @@ mixin StreamValueNotifier<T> on AutoDisposeNotifier<T?> {
 /// 每当[changeNotifier]变化，会引起Notifier变化
 ///
 /// 变化的值是从[select]获取到的
-mixin ChangeNotifierNotifier<N extends ChangeNotifier, T> on AutoDisposeNotifier<T> {
+mixin ChangeNotifierNotifier<N extends ChangeNotifier, T> on BuildlessAutoDisposeNotifier<T> {
 
   T select(N changeNotifier);
 
