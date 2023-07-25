@@ -65,6 +65,8 @@ class ProviderLoadingStateWidget extends HookConsumerWidget {
   }
 }
 
+typedef FutureStateProvider = AsyncSelector;
+
 /// 显示[futureProvider]的加载状态，加载的时候[child]不显示
 /// {@macro loading_state.LoadingStateWidget}
 class AutoDisposeProviderLoadingStateWidget extends HookConsumerWidget {
@@ -86,14 +88,14 @@ class AutoDisposeProviderLoadingStateWidget extends HookConsumerWidget {
   /// {@macro loading_state.LoadingStateWidget}
   AutoDisposeProviderLoadingStateWidget({
     super.key,
-    required AsyncSelector futureProvider,
+    required FutureStateProvider futureProvider,
     this.dependencyProvider = const [],
     required this.child,
     this.onReady,
   }) : futureProvider = [futureProvider];
 
   /// 要等待的provider，可以重试
-  final List<AsyncSelector> futureProvider;
+  final List<FutureStateProvider> futureProvider;
 
   /// 依赖的provider，用于重试
   final List<ProviderBase> dependencyProvider;
