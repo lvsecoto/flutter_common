@@ -143,14 +143,15 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
     }
     await _lock.synchronized(() async {
       _nextPageArg = null;
-      state = state.copyWith(isRefreshing: true);
+      state = state.copyWith(
+        isRefreshing: true,
+        isByRefreshIndicator: isByRefreshIndicator,
+      );
       await _fetchNextPage(
         onSuccess: (pagingData) async {
           state = state.copyWith(
             data: [],
             hasMore: pagingData.hasMore,
-            isRefreshing: true,
-            isByRefreshIndicator: isByRefreshIndicator,
           );
           // 先清除数据，再重新显示，500这个时间间隔是考虑到动画列表，消除条目需要500毫秒
           // 然后让列表回到0位置，如果不加这两行，刷新后列表会保持在原来的位置，不会回到0
@@ -158,7 +159,6 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
           await Future.delayed(const Duration(milliseconds: 500));
           state = state.copyWith(
             data: pagingData.data,
-            hasMore: pagingData.hasMore,
             isRefreshing: false,
           );
         },
