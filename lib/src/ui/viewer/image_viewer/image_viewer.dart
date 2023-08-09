@@ -30,7 +30,7 @@ void showImageViewer(
   /// 每当需要显示提示缺失权限的时候回调
   required OnImageViewerRequestPermission onImageViewerRequestPermission,
 }) {
-  Navigator.of(context).push(MaterialPageRoute(
+  Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
     builder: (context) => _ImageViewerWidget(
       imageProvider: imageProvider,
       canSave: canSave,
@@ -78,6 +78,10 @@ class _ImageViewerWidget extends StatelessWidget {
               statusBarBrightness: Brightness.dark,
               statusBarIconBrightness: Brightness.dark,
             ),
+            foregroundColor: Colors.white,
+            iconTheme: const IconThemeData(
+              color: Colors.white,
+            ),
             title: title == null ? null : Text(title!),
             backgroundColor: Colors.transparent,
             elevation: 0,
@@ -115,6 +119,9 @@ class _ImageViewerWidget extends StatelessWidget {
       extendBodyBehindAppBar: true,
       body: PhotoView(
         imageProvider: imageProvider,
+        onTapDown: (_, __, ___) {
+          Navigator.of(context).pop();
+        },
       ),
     );
   }
