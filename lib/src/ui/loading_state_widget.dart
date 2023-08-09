@@ -6,6 +6,7 @@ import 'package:common/common.dart';
 import 'package:dartx/dartx.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod/src/framework.dart';
@@ -110,10 +111,12 @@ class AutoDisposeProviderLoadingStateWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     /// 首次进入，发现有错误的缓存，就刷新一次
     useMemoized(() {
-      [...futureProvider, ...dependencyProvider]
-          .filter((it) => ref.read(it as ProviderBase) is AsyncError)
-          .forEach((it) {
-        ref.invalidate(it as ProviderBase);
+      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+        [...futureProvider, ...dependencyProvider]
+            .filter((it) => ref.read(it as ProviderBase) is AsyncError)
+            .forEach((it) {
+          ref.invalidate(it as ProviderBase);
+        });
       });
     });
     return FutureLoadingStateWidget(
@@ -174,11 +177,13 @@ class PagingLoadingStateWidget extends HookConsumerWidget {
       skipShowUpAnimation: true,
       child: Stack(
         children: [
-            AnimatedVisibilityWidget(
-              animationWidgetBuilder: AnimatedVisibilityWidget.fadeAnimationWidgetBuilder,
-              isVisible: !pagingLoadState.isRefreshing && pagingLoadState.data.isEmpty,
-              child: empty,
-            ),
+          AnimatedVisibilityWidget(
+            animationWidgetBuilder:
+                AnimatedVisibilityWidget.fadeAnimationWidgetBuilder,
+            isVisible:
+                !pagingLoadState.isRefreshing && pagingLoadState.data.isEmpty,
+            child: empty,
+          ),
           _ShowUp(child: child),
         ],
       ),
@@ -265,6 +270,7 @@ class FutureLoadingStateWidget extends HookWidget {
       stackTrace: asyncValue.stackTrace,
       isLoading: !isDone,
       onRetry: onRetry,
+      keepContentDuringLoading: asyncValue.hasData,
       // 不是非常快速完成，所以要显示动画
       skipShowUpAnimation: isFinishedQuickly == true,
       child: child,
