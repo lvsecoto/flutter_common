@@ -29,8 +29,8 @@ export 'paging_refresh_indicator.dart';
 
 /// 分页加载数据
 abstract class PagingData<NextPageArg, T> {
-  static PagingData<NextPageArg, T> empty<NextPageArg, T>() =>
-      PagingDataEmpty<NextPageArg, T>();
+  static PagingData<NextPageArg, T> empty<NextPageArg, T>(NextPageArg nextPageArg) =>
+      PagingDataEmpty<NextPageArg, T>(nextPageArg);
 
   /// 是否有更多数据
   bool get hasMore;
@@ -47,8 +47,10 @@ class PagingDataEmpty<NextPageArg, T> extends PagingData<NextPageArg, T> {
   final hasMore = false;
 
   @override
-  NextPageArg get nextPageArg => null as dynamic;
+  final NextPageArg nextPageArg;
 
   @override
   final data = List.empty();
+
+  PagingDataEmpty(this.nextPageArg);
 }
