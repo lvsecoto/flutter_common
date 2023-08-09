@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:synchronized/synchronized.dart';
@@ -69,7 +70,7 @@ class PagingLoadState<T> with _$PagingLoadState<T> {
 /// 推荐[PagingLoadMoreStateWidget]加载更多
 /// {@endtemplate}
 mixin PagingLoadNotifierMixin<T, NextPageArg>
-    on AutoDisposeNotifier<PagingLoadState<T>> {
+on AutoDisposeNotifier<PagingLoadState<T>> {
   NextPageArg? _nextPageArg;
 
   final _lock = Lock();
@@ -168,6 +169,8 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
             lastRefreshErrorStacktrace: stackTrace,
             isRefreshing: false,
           );
+          debugPrint(error.toString());
+          debugPrintStack(stackTrace: stackTrace);
         },
       );
     });
@@ -191,7 +194,8 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
       // 只有第一页刷新成功后，_nextPageArg才不会为空
       return;
     }
-    assert(state.lastRefreshError == null, '_nextPageArg不为空，就不可能有刷新错误');
+    assert(state.lastRefreshError ==
+        null, '_nextPageArg不为空，就不可能有刷新错误');
     await _lock.synchronized(() async {
       state = state.copyWith(isLoadingMore: true, hasMore: state.hasMore);
       await _fetchNextPage(
@@ -211,6 +215,8 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
             lastLoadingMoreErrorStacktrace: stackTrace,
             isLoadingMore: false,
           );
+          debugPrint(error.toString());
+          debugPrintStack(stackTrace: stackTrace);
         },
       );
     });
@@ -224,16 +230,14 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
   ///
   /// 所以在加载第一页的时候，传入的[nextPageArg]为null
   /// {@endtemplate}
-  Future<PagingData<NextPageArg, T>> fetch(
-    NextPageArg? nextPageArg,
-  );
+  Future<PagingData<NextPageArg, T>> fetch(NextPageArg? nextPageArg,);
 
   /// 加载下一页的数据，成功回调[onSuccess]，把结果传入；是比回调[onError]，把异常传入
   Future<void> _fetchNextPage({
     required FutureOr<void> Function(PagingData<NextPageArg, T> pagingData)
-        onSuccess,
+    onSuccess,
     required FutureOr<void> Function(Object? error, StackTrace stackTrace)
-        onError,
+    onError,
   }) async {
     try {
       final pagingData = await fetch(_nextPageArg);
