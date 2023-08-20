@@ -12,7 +12,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/src/notifier.dart';
 
 /// 给Notifier添加选择功能
-mixin SelectableNotifier<T> on AutoDisposeNotifier<T> {
+mixin SelectableNotifier<T> on BuildlessAutoDisposeNotifier<T> {
   /// 选择值
   void select(T value) {
     state = value;
@@ -25,7 +25,7 @@ mixin SelectableNotifier<T> on AutoDisposeNotifier<T> {
 }
 
 /// 给Notifier增加开关功能
-mixin ToggleableNotifier on AutoDisposeNotifier<bool> {
+mixin ToggleableNotifier on BuildlessAutoDisposeNotifier<bool> {
   /// 切换状态
   void toggle() {
     state = !state;
@@ -42,7 +42,7 @@ mixin ToggleableNotifier on AutoDisposeNotifier<bool> {
   }
 }
 
-mixin StreamValueNotifier<T> on AutoDisposeNotifier<T?> {
+mixin StreamValueNotifier<T> on BuildlessAutoDisposeNotifier<T?> {
   /// 桥接Stream
   StreamSubscription? _subscription;
 
@@ -122,7 +122,7 @@ mixin ChangeNotifierNotifier<N extends ChangeNotifier, T> on BuildlessAutoDispos
 /// ref.watch(textEditNotifierProvider.notifier).text = 'new text'
 ///
 /// ```
-mixin TextEditNotifier on AutoDisposeNotifier<String> {
+mixin TextEditNotifier on BuildlessAutoDisposeNotifier<String> {
   final _controller = TextEditingController();
 
   /// [controller]可以被TextField使用
@@ -130,7 +130,6 @@ mixin TextEditNotifier on AutoDisposeNotifier<String> {
 
   @mustBeOverridden
   @mustCallSuper
-  @override
   String build() {
     void onChange() {
       if (_controller.text != state) {
@@ -162,8 +161,46 @@ mixin TextEditNotifier on AutoDisposeNotifier<String> {
   }
 }
 
+mixin TextEditControllerNotifier on BuildlessAutoDisposeNotifier<String> {
+  final _controller = TextEditingController();
+
+  /// [controller]可以被TextField使用
+  TextEditingController get controller => _controller;
+
+  String onBuild() {
+    void onChange() {
+      if (_controller.text != state) {
+        onTextChange();
+      }
+    }
+
+    _controller.text = buildInitText();
+    ref.onDispose(() {
+      _controller.removeListener(onChange);
+    });
+    _controller.addListener(onChange);
+    return _controller.text;
+  }
+
+  @mustCallSuper
+  void onTextChange() {
+    state = _controller.text;
+  }
+
+  /// 改变controller的值
+  set text(String value) {
+    _controller.text = value;
+  }
+
+  /// _controller的初始化文本，可以override
+  String buildInitText() {
+    return '';
+  }
+}
+
+
 /// 焦点Notifier
-mixin FocusNotifier on AutoDisposeNotifier<bool> {
+mixin FocusNotifier on BuildlessAutoDisposeNotifier<bool> {
   final _focusNode = FocusNode();
 
   @mustBeOverridden

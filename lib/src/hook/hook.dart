@@ -9,6 +9,7 @@ void useInterval(VoidCallback callback, Duration delay) {
   savedCallback.value = callback;
 
   useEffect(() {
+    savedCallback.value();
     final timer = Timer.periodic(delay, (_) => savedCallback.value());
     return timer.cancel;
   }, [delay]);
