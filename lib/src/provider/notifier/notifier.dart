@@ -56,6 +56,9 @@ mixin StreamValueNotifier<T> on BuildlessAutoDisposeNotifier<T?> {
       }
     });
     ref.onDispose(() {
+      if (!_completer.isCompleted) {
+        _completer.complete(null);
+      }
       _subscription?.cancel();
     });
     return null;

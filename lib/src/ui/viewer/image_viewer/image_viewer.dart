@@ -119,9 +119,9 @@ class _ImageViewerWidget extends StatelessWidget {
       extendBodyBehindAppBar: true,
       body: PhotoView(
         imageProvider: imageProvider,
-        onTapDown: (_, __, ___) {
-          Navigator.of(context).pop();
-        },
+        // onTapDown: (_, __, ___) {
+        //   Navigator.of(context).pop();
+        // },
       ),
     );
   }
