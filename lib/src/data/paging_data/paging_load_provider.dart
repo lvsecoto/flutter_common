@@ -70,7 +70,7 @@ class PagingLoadState<T> with _$PagingLoadState<T> {
 /// 推荐[PagingLoadMoreStateWidget]加载更多
 /// {@endtemplate}
 mixin PagingLoadNotifierMixin<T, NextPageArg>
-on AutoDisposeNotifier<PagingLoadState<T>> {
+    on AutoDisposeNotifier<PagingLoadState<T>> {
   NextPageArg? _nextPageArg;
 
   final _lock = Lock();
@@ -153,6 +153,8 @@ on AutoDisposeNotifier<PagingLoadState<T>> {
           state = state.copyWith(
             data: [],
             hasMore: pagingData.hasMore,
+            lastRefreshError: null,
+            lastRefreshErrorStacktrace: null,
           );
           // 先清除数据，再重新显示，500这个时间间隔是考虑到动画列表，消除条目需要500毫秒
           // 然后让列表回到0位置，如果不加这两行，刷新后列表会保持在原来的位置，不会回到0
@@ -194,8 +196,7 @@ on AutoDisposeNotifier<PagingLoadState<T>> {
       // 只有第一页刷新成功后，_nextPageArg才不会为空
       return;
     }
-    assert(state.lastRefreshError ==
-        null, '_nextPageArg不为空，就不可能有刷新错误');
+    assert(state.lastRefreshError == null, '_nextPageArg不为空，就不可能有刷新错误');
     await _lock.synchronized(() async {
       state = state.copyWith(isLoadingMore: true, hasMore: state.hasMore);
       await _fetchNextPage(
@@ -230,14 +231,16 @@ on AutoDisposeNotifier<PagingLoadState<T>> {
   ///
   /// 所以在加载第一页的时候，传入的[nextPageArg]为null
   /// {@endtemplate}
-  Future<PagingData<NextPageArg, T>> fetch(NextPageArg? nextPageArg,);
+  Future<PagingData<NextPageArg, T>> fetch(
+    NextPageArg? nextPageArg,
+  );
 
   /// 加载下一页的数据，成功回调[onSuccess]，把结果传入；是比回调[onError]，把异常传入
   Future<void> _fetchNextPage({
     required FutureOr<void> Function(PagingData<NextPageArg, T> pagingData)
-    onSuccess,
+        onSuccess,
     required FutureOr<void> Function(Object? error, StackTrace stackTrace)
-    onError,
+        onError,
   }) async {
     try {
       final pagingData = await fetch(_nextPageArg);
