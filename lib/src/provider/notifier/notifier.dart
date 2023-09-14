@@ -6,7 +6,6 @@ library provider.notiifer;
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 // ignore: implementation_imports
 import 'package:riverpod/src/notifier.dart';
@@ -15,7 +14,9 @@ import 'package:riverpod/src/notifier.dart';
 mixin SelectableNotifier<T> on BuildlessAutoDisposeNotifier<T> {
   /// 选择值
   void select(T value) {
-    state = value;
+    if (stateOrNull != value) {
+      state = value;
+    }
   }
 
   /// 清除值
@@ -98,6 +99,7 @@ mixin ChangeNotifierNotifier<N extends ChangeNotifier, T> on BuildlessAutoDispos
     return select(changeNotifier);
   }
 
+  @visibleForOverriding
   @mustCallSuper
   void onChange(T value) {
     state = value;
