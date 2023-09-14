@@ -23,6 +23,7 @@ class ProviderLoadingStateWidget extends HookConsumerWidget {
     super.key,
     required this.futureProvider,
     required this.child,
+    this.keepContentDuringLoading = false,
     this.onReady,
   });
 
@@ -33,6 +34,7 @@ class ProviderLoadingStateWidget extends HookConsumerWidget {
     super.key,
     required FutureProvider futureProvider,
     required this.child,
+    this.keepContentDuringLoading = false,
     this.onReady,
   }) : futureProvider = [futureProvider];
 
@@ -43,6 +45,9 @@ class ProviderLoadingStateWidget extends HookConsumerWidget {
   final Widget child;
 
   final VoidCallback? onReady;
+
+  /// 是否在加载中时保持显示[child]
+  final bool keepContentDuringLoading;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -60,6 +65,7 @@ class ProviderLoadingStateWidget extends HookConsumerWidget {
           ref.invalidate(provider);
         }
       },
+      keepContentDuringLoading: keepContentDuringLoading,
       onReady: onReady,
       child: child,
     );
@@ -81,6 +87,7 @@ class AutoDisposeProviderLoadingStateWidget extends HookConsumerWidget {
     this.dependencyProvider = const [],
     this.onReady,
     required this.child,
+    this.keepContentDuringLoading = false,
   });
 
   /// 等待Provider完成，并支持重试，和[ProviderLoadingStateWidget]一样，
@@ -93,6 +100,7 @@ class AutoDisposeProviderLoadingStateWidget extends HookConsumerWidget {
     this.dependencyProvider = const [],
     required this.child,
     this.onReady,
+    this.keepContentDuringLoading = false,
   }) : futureProvider = [futureProvider];
 
   /// 要等待的provider，可以重试
@@ -106,6 +114,9 @@ class AutoDisposeProviderLoadingStateWidget extends HookConsumerWidget {
 
   /// [child]准备就绪回调
   final VoidCallback? onReady;
+
+  /// 是否在加载中时保持显示[child]
+  final bool keepContentDuringLoading;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -133,6 +144,7 @@ class AutoDisposeProviderLoadingStateWidget extends HookConsumerWidget {
           }
         }
       },
+      keepContentDuringLoading: keepContentDuringLoading,
       onReady: onReady,
       child: child,
     );
@@ -206,6 +218,7 @@ class FutureLoadingStateWidget extends HookWidget {
     super.key,
     required this.child,
     required this.futures,
+    this.keepContentDuringLoading = false,
     this.onRetry,
     this.onReady,
   });
@@ -221,6 +234,9 @@ class FutureLoadingStateWidget extends HookWidget {
 
   /// [child]准备就绪回调
   final VoidCallback? onReady;
+
+  /// 是否在加载中时保持显示[child]
+  final bool keepContentDuringLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -270,7 +286,7 @@ class FutureLoadingStateWidget extends HookWidget {
       stackTrace: asyncValue.stackTrace,
       isLoading: !isDone,
       onRetry: onRetry,
-      keepContentDuringLoading: asyncValue.hasData,
+      keepContentDuringLoading: keepContentDuringLoading || asyncValue.hasData,
       // 不是非常快速完成，所以要显示动画
       skipShowUpAnimation: isFinishedQuickly == true,
       child: child,
