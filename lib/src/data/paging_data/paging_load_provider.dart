@@ -33,6 +33,9 @@ class PagingLoadState<T> with _$PagingLoadState<T> {
     /// 是否在加载更多
     @Default(false) bool isLoadingMore,
 
+    /// 上一次加载到分页原始数据
+    PagingData? lastPagingData,
+
     /// 最近一次重新加载失败错误
     Object? lastRefreshError,
 
@@ -109,6 +112,7 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
       await _fetchNextPage(
         onSuccess: (pagingData) {
           state = PagingLoadState(
+            lastPagingData: pagingData,
             data: pagingData.data,
             hasMore: pagingData.hasMore,
             hasInitialized: true,
@@ -151,6 +155,7 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
       await _fetchNextPage(
         onSuccess: (pagingData) async {
           state = state.copyWith(
+            lastPagingData: pagingData,
             data: [],
             hasMore: pagingData.hasMore,
             lastRefreshError: null,
@@ -202,6 +207,7 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
       await _fetchNextPage(
         onSuccess: (pagingData) {
           state = state.copyWith(
+            lastPagingData: pagingData,
             data: [
               ...state.data,
               ...pagingData.data,

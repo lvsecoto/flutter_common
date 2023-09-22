@@ -34,6 +34,10 @@ mixin _$PagingLoadState<T> {
   /// 是否在加载更多
   bool get isLoadingMore => throw _privateConstructorUsedError;
 
+  /// 上一次加载到的数据
+  PagingData<dynamic, dynamic>? get lastPagingData =>
+      throw _privateConstructorUsedError;
+
   /// 最近一次重新加载失败错误
   Object? get lastRefreshError => throw _privateConstructorUsedError;
 
@@ -64,6 +68,7 @@ abstract class $PagingLoadStateCopyWith<T, $Res> {
       bool isByRefreshIndicator,
       bool isRefreshing,
       bool isLoadingMore,
+      PagingData<dynamic, dynamic>? lastPagingData,
       Object? lastRefreshError,
       StackTrace? lastRefreshErrorStacktrace,
       Object? lastLoadingMoreError,
@@ -89,6 +94,7 @@ class _$PagingLoadStateCopyWithImpl<T, $Res, $Val extends PagingLoadState<T>>
     Object? isByRefreshIndicator = null,
     Object? isRefreshing = null,
     Object? isLoadingMore = null,
+    Object? lastPagingData = freezed,
     Object? lastRefreshError = freezed,
     Object? lastRefreshErrorStacktrace = freezed,
     Object? lastLoadingMoreError = freezed,
@@ -119,6 +125,10 @@ class _$PagingLoadStateCopyWithImpl<T, $Res, $Val extends PagingLoadState<T>>
           ? _value.isLoadingMore
           : isLoadingMore // ignore: cast_nullable_to_non_nullable
               as bool,
+      lastPagingData: freezed == lastPagingData
+          ? _value.lastPagingData
+          : lastPagingData // ignore: cast_nullable_to_non_nullable
+              as PagingData<dynamic, dynamic>?,
       lastRefreshError: freezed == lastRefreshError
           ? _value.lastRefreshError
           : lastRefreshError,
@@ -152,6 +162,7 @@ abstract class _$$_PagingLoadStateCopyWith<T, $Res>
       bool isByRefreshIndicator,
       bool isRefreshing,
       bool isLoadingMore,
+      PagingData<dynamic, dynamic>? lastPagingData,
       Object? lastRefreshError,
       StackTrace? lastRefreshErrorStacktrace,
       Object? lastLoadingMoreError,
@@ -175,6 +186,7 @@ class __$$_PagingLoadStateCopyWithImpl<T, $Res>
     Object? isByRefreshIndicator = null,
     Object? isRefreshing = null,
     Object? isLoadingMore = null,
+    Object? lastPagingData = freezed,
     Object? lastRefreshError = freezed,
     Object? lastRefreshErrorStacktrace = freezed,
     Object? lastLoadingMoreError = freezed,
@@ -205,6 +217,10 @@ class __$$_PagingLoadStateCopyWithImpl<T, $Res>
           ? _value.isLoadingMore
           : isLoadingMore // ignore: cast_nullable_to_non_nullable
               as bool,
+      lastPagingData: freezed == lastPagingData
+          ? _value.lastPagingData
+          : lastPagingData // ignore: cast_nullable_to_non_nullable
+              as PagingData<dynamic, dynamic>?,
       lastRefreshError: freezed == lastRefreshError
           ? _value.lastRefreshError
           : lastRefreshError,
@@ -225,7 +241,8 @@ class __$$_PagingLoadStateCopyWithImpl<T, $Res>
 
 /// @nodoc
 
-class _$_PagingLoadState<T> extends _PagingLoadState<T> {
+class _$_PagingLoadState<T> extends _PagingLoadState<T>
+    with DiagnosticableTreeMixin {
   const _$_PagingLoadState(
       {required final List<T> data,
       this.hasMore = false,
@@ -233,6 +250,7 @@ class _$_PagingLoadState<T> extends _PagingLoadState<T> {
       this.isByRefreshIndicator = false,
       this.isRefreshing = false,
       this.isLoadingMore = false,
+      this.lastPagingData,
       this.lastRefreshError,
       this.lastRefreshErrorStacktrace,
       this.lastLoadingMoreError,
@@ -276,6 +294,10 @@ class _$_PagingLoadState<T> extends _PagingLoadState<T> {
   @JsonKey()
   final bool isLoadingMore;
 
+  /// 上一次加载到的数据
+  @override
+  final PagingData<dynamic, dynamic>? lastPagingData;
+
   /// 最近一次重新加载失败错误
   @override
   final Object? lastRefreshError;
@@ -291,8 +313,28 @@ class _$_PagingLoadState<T> extends _PagingLoadState<T> {
   final StackTrace? lastLoadingMoreErrorStacktrace;
 
   @override
-  String toString() {
-    return 'PagingLoadState<$T>(data: $data, hasMore: $hasMore, hasInitialized: $hasInitialized, isByRefreshIndicator: $isByRefreshIndicator, isRefreshing: $isRefreshing, isLoadingMore: $isLoadingMore, lastRefreshError: $lastRefreshError, lastRefreshErrorStacktrace: $lastRefreshErrorStacktrace, lastLoadingMoreError: $lastLoadingMoreError, lastLoadingMoreErrorStacktrace: $lastLoadingMoreErrorStacktrace)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'PagingLoadState<$T>(data: $data, hasMore: $hasMore, hasInitialized: $hasInitialized, isByRefreshIndicator: $isByRefreshIndicator, isRefreshing: $isRefreshing, isLoadingMore: $isLoadingMore, lastPagingData: $lastPagingData, lastRefreshError: $lastRefreshError, lastRefreshErrorStacktrace: $lastRefreshErrorStacktrace, lastLoadingMoreError: $lastLoadingMoreError, lastLoadingMoreErrorStacktrace: $lastLoadingMoreErrorStacktrace)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'PagingLoadState<$T>'))
+      ..add(DiagnosticsProperty('data', data))
+      ..add(DiagnosticsProperty('hasMore', hasMore))
+      ..add(DiagnosticsProperty('hasInitialized', hasInitialized))
+      ..add(DiagnosticsProperty('isByRefreshIndicator', isByRefreshIndicator))
+      ..add(DiagnosticsProperty('isRefreshing', isRefreshing))
+      ..add(DiagnosticsProperty('isLoadingMore', isLoadingMore))
+      ..add(DiagnosticsProperty('lastPagingData', lastPagingData))
+      ..add(DiagnosticsProperty('lastRefreshError', lastRefreshError))
+      ..add(DiagnosticsProperty(
+          'lastRefreshErrorStacktrace', lastRefreshErrorStacktrace))
+      ..add(DiagnosticsProperty('lastLoadingMoreError', lastLoadingMoreError))
+      ..add(DiagnosticsProperty(
+          'lastLoadingMoreErrorStacktrace', lastLoadingMoreErrorStacktrace));
   }
 
   @override
@@ -310,6 +352,8 @@ class _$_PagingLoadState<T> extends _PagingLoadState<T> {
                 other.isRefreshing == isRefreshing) &&
             (identical(other.isLoadingMore, isLoadingMore) ||
                 other.isLoadingMore == isLoadingMore) &&
+            (identical(other.lastPagingData, lastPagingData) ||
+                other.lastPagingData == lastPagingData) &&
             const DeepCollectionEquality()
                 .equals(other.lastRefreshError, lastRefreshError) &&
             (identical(other.lastRefreshErrorStacktrace,
@@ -333,6 +377,7 @@ class _$_PagingLoadState<T> extends _PagingLoadState<T> {
       isByRefreshIndicator,
       isRefreshing,
       isLoadingMore,
+      lastPagingData,
       const DeepCollectionEquality().hash(lastRefreshError),
       lastRefreshErrorStacktrace,
       const DeepCollectionEquality().hash(lastLoadingMoreError),
@@ -354,6 +399,7 @@ abstract class _PagingLoadState<T> extends PagingLoadState<T> {
           final bool isByRefreshIndicator,
           final bool isRefreshing,
           final bool isLoadingMore,
+          final PagingData<dynamic, dynamic>? lastPagingData,
           final Object? lastRefreshError,
           final StackTrace? lastRefreshErrorStacktrace,
           final Object? lastLoadingMoreError,
@@ -385,6 +431,10 @@ abstract class _PagingLoadState<T> extends PagingLoadState<T> {
 
   /// 是否在加载更多
   bool get isLoadingMore;
+  @override
+
+  /// 上一次加载到的数据
+  PagingData<dynamic, dynamic>? get lastPagingData;
   @override
 
   /// 最近一次重新加载失败错误
