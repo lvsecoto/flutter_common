@@ -21,14 +21,14 @@ dependencies:
 
   animated_size_and_fade: ^3.0.1
   document_file_save_plus: ^2.0.0
-  saver_gallery: ^2.0.1
+  saver_gallery: ^3.0.1
   hooks_riverpod: ^2.3.8
   photo_view: ^0.14.0
   riverpod: ^2.3.7
   riverpod_annotation: ^2.1.2
   sliver_tools: ^0.2.12
-  syncfusion_flutter_core: ^22.2.10
-  syncfusion_flutter_pdfviewer: ^22.2.10
+  syncfusion_flutter_core: ^23.1.44
+  syncfusion_flutter_pdfviewer: ^23.1.39
   url_launcher: ^6.1.12
   animated_list_plus: ^0.5.1
   webview_flutter: ^4.2.2
@@ -36,16 +36,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.2
+  flutter_lints: ^3.0.1
   build_runner:
   custom_lint:
   freezed: ^2.4.1
   riverpod_generator: ^2.3.1
   riverpod_lint: ^2.0.1
-
-dependency_overrides:
-  webview_flutter_android:
-    git: git@codeup.aliyun.com:6240585956f85235f7dd77d1/app/webview_flutter_android-3.9.2.git
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
