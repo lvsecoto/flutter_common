@@ -14,24 +14,24 @@ dependencies:
   rxdart: ^0.27.7
   synchronized: ^3.1.0
   freezed_annotation: ^2.4.1
-  flutter_riverpod: ^2.3.10
-  flutter_hooks: ^0.20.1
+  flutter_riverpod: ^2.4.9
+  flutter_hooks: ^0.20.4
   flutter_portal: ^1.1.4
   visibility_detector: ^0.4.0+2
 
-  animated_size_and_fade: ^3.0.1
+  animated_size_and_fade: ^4.0.0
   document_file_save_plus: ^2.0.0
-  saver_gallery: ^3.0.1
-  hooks_riverpod: ^2.3.8
+  saver_gallery: ^3.0.2
+  hooks_riverpod: ^2.4.9
   photo_view: ^0.14.0
-  riverpod: ^2.3.7
-  riverpod_annotation: ^2.1.2
+  riverpod: ^2.4.9
+  riverpod_annotation: ^2.3.3
   sliver_tools: ^0.2.12
   syncfusion_flutter_core: ^23.1.44
   syncfusion_flutter_pdfviewer: ^23.1.39
-  url_launcher: ^6.1.12
-  animated_list_plus: ^0.5.1
-  webview_flutter: ^4.2.2
+  url_launcher: ^6.2.4
+  animated_list_plus: ^0.5.2
+  webview_flutter: ^4.5.0
 
 dev_dependencies:
   flutter_test:
@@ -39,12 +39,9 @@ dev_dependencies:
   flutter_lints: ^3.0.1
   build_runner:
   custom_lint:
-  freezed: ^2.4.1
-  riverpod_generator: ^2.3.1
-  riverpod_lint: ^2.0.1
-
-dependency_overrides:
-  uuid: ^4.0.0
+  freezed: ^2.4.6
+  riverpod_generator: ^2.3.9
+  riverpod_lint: ^2.3.7
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
