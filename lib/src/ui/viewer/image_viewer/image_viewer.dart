@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:photo_view/photo_view.dart';
-import 'package:saver_gallery/saver_gallery.dart';
 
 typedef OnImageViewerMessage = Function(BuildContext context, String message);
 
@@ -91,23 +90,23 @@ class _ImageViewerWidget extends StatelessWidget {
                   onPressed: () async {
                     final imageProvider = this.imageProvider;
                     if (imageProvider is MemoryImage) {
-                      final result = await SaverGallery.saveImage(
-                        imageProvider.bytes,
-                        quality: 100,
-                        name: title ??
-                            DateTime.now().millisecondsSinceEpoch.toString(),
-                        androidExistNotSave: true,
-                      );
+                      // final result = await SaverGallery.saveImage(
+                      //   imageProvider.bytes,
+                      //   quality: 100,
+                      //   name: title ??
+                      //       DateTime.now().millisecondsSinceEpoch.toString(),
+                      //   androidExistNotSave: true,
+                      // );
 
-                      if (result.isSuccess && context.mounted) {
-                        onImageViewerMessage(context, '图片已保存到相册');
-                      } else if (!result.isSuccess &&
-                          Platform.isIOS &&
-                          context.mounted) {
-                        onImageViewerRequestPermission(context);
-                      } else if (!result.isSuccess && context.mounted) {
-                        onImageViewerMessage(context, '保存失败');
-                      }
+                      // if (result.isSuccess && context.mounted) {
+                      //   onImageViewerMessage(context, '图片已保存到相册');
+                      // } else if (!result.isSuccess &&
+                      //     Platform.isIOS &&
+                      //     context.mounted) {
+                      //   onImageViewerRequestPermission(context);
+                      // } else if (!result.isSuccess && context.mounted) {
+                      //   onImageViewerMessage(context, '保存失败');
+                      // }
                     }
                   },
                   icon: const Icon(Icons.save),
