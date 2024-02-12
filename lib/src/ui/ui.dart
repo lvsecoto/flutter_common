@@ -9,3 +9,4 @@ export 'sliver_container.dart';
 export 'ink_well_foreground.dart';
 export 'loading_state_widget.dart';
 export 'loading_state_theme.dart';
+export 'animated_size_and_fade.dart';
