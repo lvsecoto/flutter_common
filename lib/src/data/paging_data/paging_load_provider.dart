@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod/riverpod.dart';
 import 'package:synchronized/synchronized.dart';
+// ignore: implementation_imports
+import 'package:riverpod/src/notifier.dart';
 
 import 'paging_data.dart';
 
@@ -73,7 +74,8 @@ class PagingLoadState<T> with _$PagingLoadState<T> {
 /// 推荐[PagingLoadMoreStateWidget]加载更多
 /// {@endtemplate}
 mixin PagingLoadNotifierMixin<T, NextPageArg>
-    on AutoDisposeNotifier<PagingLoadState<T>> {
+    // ignore: invalid_use_of_internal_member
+    on BuildlessAutoDisposeNotifier<PagingLoadState<T>> {
   NextPageArg? _nextPageArg;
 
   final _lock = Lock();
@@ -95,18 +97,16 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
   /// *由于依赖发生了变化，先前的数据会清除*
   ///
   /// *需要在StateNotifier中重写`build`，即使代码上是不需要的*
-  /// 但因为riverpod生成器需要有个[build]才能生成代码
+  /// 但因为riverpod生成器需要有个[onBuild]才能生成代码
   /// ```dart
   /// @override
   /// PagingLoadState<Issue> build() {
   ///   // ignore: unnecessary_overrides
   ///   return super.build();
   /// }
-  ///
-  /// {@endtemplate}
   /// ```
-  @override
-  PagingLoadState<T> build() {
+  /// {@endtemplate}
+  PagingLoadState<T> onBuild() {
     _lock.synchronized(() async {
       _nextPageArg = null;
       await _fetchNextPage(

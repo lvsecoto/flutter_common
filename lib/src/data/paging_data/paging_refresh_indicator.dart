@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// ignore: implementation_imports
+import 'package:riverpod/src/notifier.dart';
+
 import 'paging_load_provider.dart';
 
 class PagingRefreshIndicator<Notifier extends PagingLoadNotifierMixin>
@@ -24,7 +27,8 @@ class PagingRefreshIndicator<Notifier extends PagingLoadNotifierMixin>
   final Widget child;
 
   /// 加载更多的[StateNotifier]
-  final AutoDisposeNotifierProvider<Notifier, PagingLoadState>
+  // ignore: invalid_use_of_internal_member
+  final NotifierProviderBase<Notifier, PagingLoadState>
       pagingLoadProvider;
 
   @override

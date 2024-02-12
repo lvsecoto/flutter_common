@@ -1,8 +1,10 @@
-import 'package:animated_size_and_fade/animated_size_and_fade.dart';
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+
+// ignore: implementation_imports
+import 'package:riverpod/src/notifier.dart';
 
 class PagingLoadMoreStateWidget<Notifier extends PagingLoadNotifierMixin>
     extends ConsumerWidget {
@@ -13,7 +15,8 @@ class PagingLoadMoreStateWidget<Notifier extends PagingLoadNotifierMixin>
   });
 
   /// 加载更多的[StateNotifier]
-  final AutoDisposeNotifierProvider<Notifier, PagingLoadState>
+  // ignore: invalid_use_of_internal_member
+  final NotifierProviderBase<Notifier, PagingLoadState>
       pagingLoadProvider;
 
   @override
@@ -33,13 +36,14 @@ class PagingLoadMoreStateWidget<Notifier extends PagingLoadNotifierMixin>
         },
         child: AnimatedVisibilityWidget(
           animationWidgetBuilder: AnimatedVisibilityWidget.fadeAnimationWidgetBuilder,
+          duration: kThemeAnimationDuration * 2,
           isVisible: isLoadingMore,
-          child: const Center(
+          child: Center(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: SizedBox.square(
                 dimension: 48,
-                child: CircularProgressIndicator(),
+                child: isLoadingMore ? const CircularProgressIndicator() : null,
               ),
             ),
           ),
@@ -51,8 +55,7 @@ class PagingLoadMoreStateWidget<Notifier extends PagingLoadNotifierMixin>
 
     return SliverToBoxAdapter(
       child: AnimatedSizeAndFade(
-        sizeDuration: kThemeAnimationDuration,
-        fadeDuration: kThemeAnimationDuration,
+        childKey: hasMore,
         child: child,
       ),
     );

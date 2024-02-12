@@ -34,7 +34,7 @@ mixin _$PagingLoadState<T> {
   /// 是否在加载更多
   bool get isLoadingMore => throw _privateConstructorUsedError;
 
-  /// 上一次加载到的数据
+  /// 上一次加载到分页原始数据
   PagingData<dynamic, dynamic>? get lastPagingData =>
       throw _privateConstructorUsedError;
 
@@ -148,11 +148,11 @@ class _$PagingLoadStateCopyWithImpl<T, $Res, $Val extends PagingLoadState<T>>
 }
 
 /// @nodoc
-abstract class _$$_PagingLoadStateCopyWith<T, $Res>
+abstract class _$$PagingLoadStateImplCopyWith<T, $Res>
     implements $PagingLoadStateCopyWith<T, $Res> {
-  factory _$$_PagingLoadStateCopyWith(_$_PagingLoadState<T> value,
-          $Res Function(_$_PagingLoadState<T>) then) =
-      __$$_PagingLoadStateCopyWithImpl<T, $Res>;
+  factory _$$PagingLoadStateImplCopyWith(_$PagingLoadStateImpl<T> value,
+          $Res Function(_$PagingLoadStateImpl<T>) then) =
+      __$$PagingLoadStateImplCopyWithImpl<T, $Res>;
   @override
   @useResult
   $Res call(
@@ -170,11 +170,11 @@ abstract class _$$_PagingLoadStateCopyWith<T, $Res>
 }
 
 /// @nodoc
-class __$$_PagingLoadStateCopyWithImpl<T, $Res>
-    extends _$PagingLoadStateCopyWithImpl<T, $Res, _$_PagingLoadState<T>>
-    implements _$$_PagingLoadStateCopyWith<T, $Res> {
-  __$$_PagingLoadStateCopyWithImpl(
-      _$_PagingLoadState<T> _value, $Res Function(_$_PagingLoadState<T>) _then)
+class __$$PagingLoadStateImplCopyWithImpl<T, $Res>
+    extends _$PagingLoadStateCopyWithImpl<T, $Res, _$PagingLoadStateImpl<T>>
+    implements _$$PagingLoadStateImplCopyWith<T, $Res> {
+  __$$PagingLoadStateImplCopyWithImpl(_$PagingLoadStateImpl<T> _value,
+      $Res Function(_$PagingLoadStateImpl<T>) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -192,7 +192,7 @@ class __$$_PagingLoadStateCopyWithImpl<T, $Res>
     Object? lastLoadingMoreError = freezed,
     Object? lastLoadingMoreErrorStacktrace = freezed,
   }) {
-    return _then(_$_PagingLoadState<T>(
+    return _then(_$PagingLoadStateImpl<T>(
       data: null == data
           ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
@@ -241,9 +241,9 @@ class __$$_PagingLoadStateCopyWithImpl<T, $Res>
 
 /// @nodoc
 
-class _$_PagingLoadState<T> extends _PagingLoadState<T>
+class _$PagingLoadStateImpl<T> extends _PagingLoadState<T>
     with DiagnosticableTreeMixin {
-  const _$_PagingLoadState(
+  const _$PagingLoadStateImpl(
       {required final List<T> data,
       this.hasMore = false,
       this.hasInitialized = false,
@@ -294,7 +294,7 @@ class _$_PagingLoadState<T> extends _PagingLoadState<T>
   @JsonKey()
   final bool isLoadingMore;
 
-  /// 上一次加载到的数据
+  /// 上一次加载到分页原始数据
   @override
   final PagingData<dynamic, dynamic>? lastPagingData;
 
@@ -338,10 +338,10 @@ class _$_PagingLoadState<T> extends _PagingLoadState<T>
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_PagingLoadState<T> &&
+            other is _$PagingLoadStateImpl<T> &&
             const DeepCollectionEquality().equals(other._data, _data) &&
             (identical(other.hasMore, hasMore) || other.hasMore == hasMore) &&
             (identical(other.hasInitialized, hasInitialized) ||
@@ -386,8 +386,8 @@ class _$_PagingLoadState<T> extends _PagingLoadState<T>
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PagingLoadStateCopyWith<T, _$_PagingLoadState<T>> get copyWith =>
-      __$$_PagingLoadStateCopyWithImpl<T, _$_PagingLoadState<T>>(
+  _$$PagingLoadStateImplCopyWith<T, _$PagingLoadStateImpl<T>> get copyWith =>
+      __$$PagingLoadStateImplCopyWithImpl<T, _$PagingLoadStateImpl<T>>(
           this, _$identity);
 }
 
@@ -404,7 +404,7 @@ abstract class _PagingLoadState<T> extends PagingLoadState<T> {
           final StackTrace? lastRefreshErrorStacktrace,
           final Object? lastLoadingMoreError,
           final StackTrace? lastLoadingMoreErrorStacktrace}) =
-      _$_PagingLoadState<T>;
+      _$PagingLoadStateImpl<T>;
   const _PagingLoadState._() : super._();
 
   @override
@@ -433,7 +433,7 @@ abstract class _PagingLoadState<T> extends PagingLoadState<T> {
   bool get isLoadingMore;
   @override
 
-  /// 上一次加载到的数据
+  /// 上一次加载到分页原始数据
   PagingData<dynamic, dynamic>? get lastPagingData;
   @override
 
@@ -451,6 +451,6 @@ abstract class _PagingLoadState<T> extends PagingLoadState<T> {
   StackTrace? get lastLoadingMoreErrorStacktrace;
   @override
   @JsonKey(ignore: true)
-  _$$_PagingLoadStateCopyWith<T, _$_PagingLoadState<T>> get copyWith =>
+  _$$PagingLoadStateImplCopyWith<T, _$PagingLoadStateImpl<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }
