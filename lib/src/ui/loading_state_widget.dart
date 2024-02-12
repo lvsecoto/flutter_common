@@ -10,6 +10,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod/src/framework.dart';
+import 'package:riverpod/src/notifier.dart';
 
 export 'loading_state_theme.dart';
 
@@ -161,7 +162,7 @@ class PagingLoadingStateWidget extends HookConsumerWidget {
     this.onReady,
   });
 
-  final AutoDisposeNotifierProvider<PagingLoadNotifierMixin, PagingLoadState>
+  final NotifierProviderBase<PagingLoadNotifierMixin, PagingLoadState>
       pagingLoadNotifier;
 
   final Widget child;
