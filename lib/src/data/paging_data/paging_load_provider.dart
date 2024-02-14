@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:synchronized/synchronized.dart';
+
 // ignore: implementation_imports
 import 'package:riverpod/src/notifier.dart';
 
@@ -74,7 +75,7 @@ class PagingLoadState<T> with _$PagingLoadState<T> {
 /// 推荐[PagingLoadMoreStateWidget]加载更多
 /// {@endtemplate}
 mixin PagingLoadNotifierMixin<T, NextPageArg>
-    // ignore: invalid_use_of_internal_member
+// ignore: invalid_use_of_internal_member
     on BuildlessAutoDisposeNotifier<PagingLoadState<T>> {
   NextPageArg? _nextPageArg;
 
@@ -106,7 +107,9 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
   /// }
   /// ```
   /// {@endtemplate}
-  PagingLoadState<T> onBuild() {
+  PagingLoadState<T> onBuild({
+    List<T> defaultData = const [],
+  }) {
     _lock.synchronized(() async {
       _nextPageArg = null;
       await _fetchNextPage(
@@ -120,7 +123,7 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
         },
         onError: (error, stackTrace) {
           state = PagingLoadState(
-            data: const [],
+            data: defaultData,
             lastRefreshError: error,
             lastRefreshErrorStacktrace: stackTrace,
             hasInitialized: true,
@@ -129,7 +132,7 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
       );
     });
     return PagingLoadState(
-      data: [],
+      data: defaultData,
       isRefreshing: true,
       hasInitialized: _state?.hasInitialized ?? false,
     );
