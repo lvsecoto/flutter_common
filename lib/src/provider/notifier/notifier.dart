@@ -47,8 +47,7 @@ mixin StreamValueNotifier<T> on BuildlessAutoDisposeNotifier<T?> {
   /// 桥接Stream
   StreamSubscription? _subscription;
 
-  @override
-  T? build() {
+  T? onBuild() {
     _completer = Completer();
     _subscription = buildStream().listen((next) {
       state = next;
