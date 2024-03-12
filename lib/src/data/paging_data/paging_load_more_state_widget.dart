@@ -1,13 +1,16 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 // ignore: implementation_imports
 import 'package:riverpod/src/notifier.dart';
 
 class PagingLoadMoreStateWidget<Notifier extends PagingLoadNotifierMixin>
-    extends ConsumerWidget {
+    extends HookConsumerWidget {
   /// 放在列表底部，用来控制加载更多、显示加载更多状态
   const PagingLoadMoreStateWidget({
     super.key,
@@ -16,34 +19,48 @@ class PagingLoadMoreStateWidget<Notifier extends PagingLoadNotifierMixin>
 
   /// 加载更多的[StateNotifier]
   // ignore: invalid_use_of_internal_member
-  final NotifierProviderBase<Notifier, PagingLoadState>
-      pagingLoadProvider;
+  final NotifierProviderBase<Notifier, PagingLoadState> pagingLoadProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoadingMore =
         ref.watch(pagingLoadProvider.select((it) => it.isLoadingMore));
     final hasMore = ref.watch(pagingLoadProvider.select((it) => it.hasMore));
+    final lastVisible = useRef(false);
 
     Widget child;
     if (hasMore) {
-      child = VisibilityDetector(
-        key: Key(pagingLoadProvider.toString()),
-        onVisibilityChanged: (it) {
-          if(it.visibleFraction == 1.0) {
-            ref.read(pagingLoadProvider.notifier).loadMore();
-          }
-        },
-        child: AnimatedVisibilityWidget(
-          animationWidgetBuilder: AnimatedVisibilityWidget.fadeAnimationWidgetBuilder,
-          duration: kThemeAnimationDuration * 2,
-          isVisible: isLoadingMore,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: SizedBox.square(
-                dimension: 48,
-                child: isLoadingMore ? const CircularProgressIndicator() : null,
+      child = AnimatedSizeAndFade(
+        child: VisibilityDetector(
+          key: Key(pagingLoadProvider.toString()),
+          onVisibilityChanged: (it) {
+            var visible = it.visibleFraction > 0.5;
+            if (visible != lastVisible.value) {
+              lastVisible.value = visible;
+              if (visible) {
+                Future.doWhile(() async {
+                  await Future.delayed(const Duration(milliseconds: 250));
+                  return (await ref
+                          .read(pagingLoadProvider.notifier)
+                          .loadMore() &&
+                      lastVisible.value);
+                });
+              }
+            }
+          },
+          child: AnimatedVisibilityWidget(
+            animationWidgetBuilder:
+                AnimatedVisibilityWidget.fadeAnimationWidgetBuilder,
+            duration: kThemeAnimationDuration * 2,
+            isVisible: isLoadingMore,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: SizedBox.square(
+                  dimension: 48,
+                  child:
+                      isLoadingMore ? const CircularProgressIndicator() : null,
+                ),
               ),
             ),
           ),
@@ -55,7 +72,7 @@ class PagingLoadMoreStateWidget<Notifier extends PagingLoadNotifierMixin>
 
     return SliverToBoxAdapter(
       child: AnimatedSizeAndFade(
-        childKey: hasMore,
+        childKey: (hasMore, pagingLoadProvider),
         child: child,
       ),
     );
