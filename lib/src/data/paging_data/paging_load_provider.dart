@@ -74,6 +74,10 @@ class PagingLoadState<T> with _$PagingLoadState<T> {
 ///
 /// 推荐[PagingLoadMoreStateWidget]加载更多
 /// {@endtemplate}
+///
+/// ### 重写'onAppendNewData'来控制如何拼接新数据
+///
+/// 一般情况下，直接把新数据拼接到原有数据下面，我们可用通过'onAppendNewData'来修改拼接方式
 mixin PagingLoadNotifierMixin<T, NextPageArg>
 // ignore: invalid_use_of_internal_member
     on BuildlessAutoDisposeNotifier<PagingLoadState<T>> {
@@ -87,6 +91,14 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
   set state(PagingLoadState<T> value) {
     _state = value;
     super.state = value;
+  }
+
+  /// 用原有的数据[data]，拼接新加载数据[newData]，可以通过重载来改变拼接方式
+  List<T> onAppendNewData(List<T> data, List<T> newData) {
+    return [
+      ...data,
+      ...newData,
+    ];
   }
 
   /// {@template paging_data.PagingLoadNotifierMixin.build}
@@ -116,7 +128,7 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
         onSuccess: (pagingData) {
           state = PagingLoadState(
             lastPagingData: pagingData,
-            data: pagingData.data,
+            data: onAppendNewData([], pagingData.data),
             hasMore: pagingData.hasMore,
             hasInitialized: true,
           );
@@ -169,7 +181,7 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
           // 这样不符合效果
           await Future.delayed(const Duration(milliseconds: 500));
           state = state.copyWith(
-            data: pagingData.data,
+            data: onAppendNewData([], pagingData.data),
             isRefreshing: false,
           );
         },
@@ -193,16 +205,16 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
   /// * 加载中的时候，重复调用没有效果
   /// * [Future]直到一页数据加载完才完成*
   /// {@endtemplate}
-  Future<void> loadMore() async {
+  Future<bool> loadMore() async {
     if (state.isLoading) {
-      return;
+      return false;
     }
     if (!state.hasMore) {
-      return;
+      return false;
     }
     if (_nextPageArg == null) {
       // 只有第一页刷新成功后，_nextPageArg才不会为空
-      return;
+      return false;
     }
     assert(state.lastRefreshError == null, '_nextPageArg不为空，就不可能有刷新错误');
     await _lock.synchronized(() async {
@@ -211,10 +223,10 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
         onSuccess: (pagingData) {
           state = state.copyWith(
             lastPagingData: pagingData,
-            data: [
-              ...state.data,
-              ...pagingData.data,
-            ],
+            data: onAppendNewData(
+              state.data,
+              pagingData.data,
+            ),
             hasMore: pagingData.hasMore,
             isLoadingMore: false,
           );
@@ -230,6 +242,8 @@ mixin PagingLoadNotifierMixin<T, NextPageArg>
         },
       );
     });
+
+    return true;
   }
 
   /// {@template paging_data.PagingLoadNotifierMixin.fetch}
