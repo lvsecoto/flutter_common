@@ -1,8 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -26,7 +24,7 @@ class PagingLoadMoreStateWidget<Notifier extends PagingLoadNotifierMixin>
     final isLoadingMore =
         ref.watch(pagingLoadProvider.select((it) => it.isLoadingMore));
     final hasMore = ref.watch(pagingLoadProvider.select((it) => it.hasMore));
-    final lastVisible = useRef(false);
+    final lastVisibleState = useRef(false);
 
     Widget child;
     if (hasMore) {
@@ -35,15 +33,15 @@ class PagingLoadMoreStateWidget<Notifier extends PagingLoadNotifierMixin>
           key: Key(pagingLoadProvider.toString()),
           onVisibilityChanged: (it) {
             var visible = it.visibleFraction > 0.5;
-            if (visible != lastVisible.value) {
-              lastVisible.value = visible;
+            if (visible != lastVisibleState.value) {
+              lastVisibleState.value = visible;
               if (visible) {
                 Future.doWhile(() async {
                   await Future.delayed(const Duration(milliseconds: 250));
                   return (await ref
                           .read(pagingLoadProvider.notifier)
                           .loadMore() &&
-                      lastVisible.value);
+                      lastVisibleState.value);
                 });
               }
             }
